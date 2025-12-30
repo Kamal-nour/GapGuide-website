@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Level 1 Plan Payment</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
+
+  <div class="bg-gray-800 p-8 rounded-lg shadow-lg max-w-md w-full">
+    <h1 class="text-3xl font-bold mb-4 text-center">🌱 Level 1 Plan</h1>
+    <p class="mb-2 text-center">💵 <strong>$25</strong> / month</p>
+    <p class="mb-4 text-center">💰 <strong>$240</strong> / year</p>
+
+    <form id="paymentForm" enctype="multipart/form-data" class="space-y-4">
+      <input type="hidden" name="plan" value="Basic">
+
+      <label class="block mb-2">Choose Payment Option:</label>
+      <select name="amount" class="w-full p-2 rounded bg-gray-700 border border-gray-600 text-white">
+        <option value="25">Monthly - $25</option>
+        <option value="240">Annual - $240</option>
+      </select>
+
+      <label class="block mb-2">Wish Number:</label>
+      <input type="text" name="wish_number" readonly value="+961 81 862 271"
+             class="w-full p-2 rounded bg-gray-700 border border-gray-600 text-green-400 font-semibold"/>
+
+      <label class="block mb-2">Wish Transaction Reference Number:</label>
+      <input type="text" name="reference_code" required placeholder="Enter transaction reference"
+             class="w-full p-2 rounded bg-gray-700 border border-gray-600"/>
+
+      <label class="block mb-2">Upload Payment Proof:</label>
+      <input type="file" name="proof" accept="image/*" required
+             class="w-full p-2 rounded bg-gray-700 border border-gray-600"/>
+
+      <button type="submit" class="w-full py-3 bg-green-500 hover:bg-green-600 rounded font-semibold">Submit Payment</button>
+    </form>
+  </div>
+
+  <script>
+    // Get course name from URL and fill input
+const urlParams = new URLSearchParams(window.location.search);
+const courseName = urlParams.get('course');
+if (courseName) {
+    const courseInput = document.querySelector('#courseName'); // change ID to your actual input ID
+    if (courseInput) {
+        courseInput.value = courseName;
+    }
+}
+    document.getElementById("paymentForm").onsubmit = async function (e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+
+      try {
+        const response = await fetch("submit_subscription.php", {
+    method: "POST",
+    body: formData
+});
+
+        const result = await response.text();
+        if (result.includes("success")) {
+          alert("✅ Payment submitted successfully!");
+          this.reset();
+        } else {
+          alert("❌ Error submitting payment. Please try again.");
+        }
+      } catch (error) {
+        alert("❌ Network or server error.");
+        console.error(error);
+      }
+    };
+  </script>
+
+</body>
+</html>

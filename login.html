@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login - Gap Guide</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-white text-black">
+  <div class="w-full max-w-md p-6">
+    <h1 class="text-3xl font-bold mb-6 text-center">Welcome back</h1>
+
+    <!-- Email input -->
+    <input
+      id="email"
+      type="email"
+      placeholder="Email address"
+      class="w-full border border-blue-500 rounded-full px-4 py-3 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
+    />
+
+    <!-- Password input -->
+    <input
+      id="password"
+      type="password"
+      placeholder="Password"
+      class="w-full border border-blue-500 rounded-full px-4 py-3 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
+    />
+
+    <!-- Email login button -->
+    <button
+      onclick="emailLogin()"
+      class="w-full bg-black text-white rounded-full py-3 font-semibold mb-4 hover:opacity-90"
+    >
+      Continue
+    </button>
+
+    <!-- Forgot and Sign up links -->
+    <div class="flex justify-between text-sm mt-2">
+      <a href="#" onclick="forgotPassword()" class="text-blue-600 hover:underline">Forgot password?</a>
+      <a href="/signup.html" class="text-blue-600 hover:underline">Sign up</a>
+    </div>
+
+    <!-- Divider -->
+    <div class="flex items-center my-6">
+      <hr class="flex-grow border-gray-300" />
+      <span class="px-3 text-gray-400 text-sm">OR</span>
+      <hr class="flex-grow border-gray-300" />
+    </div>
+
+    <!-- Google sign-in -->
+    <button
+      onclick="googleLogin()"
+      class="w-full border rounded-full py-2 flex items-center justify-center space-x-2 hover:bg-gray-50"
+    >
+      <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" alt="Google" />
+      <span>Continue with Google</span>
+    </button>
+
+    <!-- Terms -->
+    <div class="mt-6 text-center text-xs text-gray-500">
+      <a href="#" class="hover:underline">Terms of Use</a> |
+      <a href="#" class="hover:underline">Privacy Policy</a>
+    </div>
+  </div>
+
+  <!-- Firebase Auth Script -->
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import {
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    sendPasswordResetEmail
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCQRn4QPnQ8rh7_fcQ6mbc7r3PZ4NLGuKM",
+    authDomain: "gapguide-3bed6.firebaseapp.com",
+    projectId: "gapguide-3bed6",
+    appId: "1:607160599204:web:8e0a0050c7ff7952471c31"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  // Google sign-in
+  window.googleLogin = () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then(result => {
+        alert("✅ Logged in: " + result.user.email);
+        window.location.href = "index.html"; // redirect to your homepage
+      })
+      .catch(error => {
+        alert("❌ Google sign-in failed: " + error.message);
+      });
+  };
+
+  // Email login
+  window.emailLogin = () => {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    signInWithEmailAndPassword(auth, email, password)
+      .then(result => {
+        alert("✅ Logged in: " + result.user.email);
+        window.location.href = "index.html"; // redirect to your homepage
+      })
+      .catch(error => {
+        alert("❌ Email login failed: " + error.message);
+      });
+  };
+
+  // Email sign-up
+  window.emailSignUp = () => {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(result => {
+        alert("✅ Account created: " + result.user.email);
+        window.location.href = "index.html"; // redirect to your homepage
+      })
+      .catch(error => {
+        alert("❌ Sign-up failed: " + error.message);
+      });
+  };
+
+  // Forgot password
+  window.forgotPassword = () => {
+    const email = prompt("Enter your email to reset password:");
+    if (!email) return;
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        alert("📧 Password reset email sent! Please check your inbox.");
+      })
+      .catch(error => {
+        console.error("Reset error:", error);
+        alert("❌ Failed to send reset email.");
+      });
+  };
+</script>
+
+</body>
+</html>

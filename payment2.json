@@ -1,0 +1,141 @@
+{
+    "pageTitle": "Level 2 \u2022 Luxury One-Time Payment",
+    "description": "Pay once. Premium, fast and private checkout.",
+    "wishNumber": "+961 81 862 271",
+    "defaultAmount": 149,
+    "currency": "USD",
+    "allowedFileTypes": "PNG, JPG or PDF",
+    "successMessage": "Thank you! Your payment proof was received and is being verified.",
+    "0": {
+        "plan": "Unknown",
+        "amount": "299",
+        "wish_number": "",
+        "reference_code": "",
+        "proof_file": "68977cd57160a0.26229862_Screenshot 2025-07-28 221008.png",
+        "timestamp": "2025-08-09 16:52:37"
+    },
+    "1": {
+        "plan": "Unknown",
+        "amount": "",
+        "wish_number": "",
+        "reference_code": "",
+        "proof_file": "68977f358bf9b6.82065552_Screenshot 2025-07-28 221008.png",
+        "timestamp": "2025-08-09 17:02:45"
+    },
+    "2": {
+        "plan": "Unknown",
+        "amount": "",
+        "wish_number": "",
+        "reference_code": "",
+        "proof_file": "68977ff2c65818.14302650_Screenshot 2025-07-28 221008.png",
+        "timestamp": "2025-08-09 17:05:54"
+    },
+    "3": {
+        "plan": "Level 2 \u2022 Luxury One-Time Payment",
+        "amount": "149",
+        "wish_number": "+961 81 862 271",
+        "reference_code": "999999",
+        "email": "kuzgungebci77@gmail.com",
+        "proof_file": "689780a4060db5.32910463_1000593768.jpg",
+        "timestamp": "2025-08-09 17:08:52"
+    },
+    "4": {
+        "plan": "",
+        "amount": "299",
+        "email": "mib18@mail.aub.edu",
+        "wish_number": "+961 81 862 271",
+        "reference_code": "1234",
+        "proof_file": "689781be840282.23941739_Screenshot_2025-07-28_221008.png",
+        "timestamp": "2025-08-09 17:13:34"
+    },
+    "5": {
+        "plan": "",
+        "amount": "249",
+        "email": "mostafabdeir@gmail.com",
+        "wish_number": "+961 81 862 271",
+        "reference_code": "999999",
+        "proof_file": "689781cb263508.84248127_Assignment_1_-_Sample_II.pdf",
+        "timestamp": "2025-08-09 17:13:47"
+    },
+    "6": {
+        "plan": "",
+        "amount": "249",
+        "email": "mostafabdeir@gmail.com",
+        "wish_number": "+961 81 862 271",
+        "reference_code": "999999",
+        "proof_file": "689782d681aab4.43826662_Assignment_1_-_Sample_II.pdf",
+        "timestamp": "2025-08-09 17:18:14"
+    },
+    "7": {
+        "plan": "",
+        "amount": "249",
+        "email": "mostafabdeir@gmail.com",
+        "wish_number": "+961 81 862 271",
+        "reference_code": "1231231",
+        "proof_file": "689782e26684e1.64367810_Assignment_1_-_Sample_II.pdf",
+        "timestamp": "2025-08-09 17:18:26"
+    },
+    "8": {
+        "plan": "",
+        "amount": "249",
+        "email": "kuzgungebci77@gmail.com",
+        "wish_number": "+961 81 862 271",
+        "reference_code": "1234",
+        "proof_file": "689783d92673a2.31160452_____Assignment_1_Solution__1_____.pdf",
+        "timestamp": "2025-08-09 17:22:33"
+    },
+    "9": {
+        "plan": "",
+        "amount": "249",
+        "email": "kuzgungebci77@gmail.com",
+        "wish_number": "+961 81 862 271",
+        "reference_code": "1234",
+        "proof_file": "6897847ace7da9.82475383_____Assignment_1_Solution__1_____.pdf",
+        "timestamp": "2025-08-09 17:25:14"
+    },
+    "10": {
+        "plan": "",
+        "amount": "249",
+        "email": "kuzgungebci77@gmail.com",
+        "wish_number": "+961 81 862 271",
+        "reference_code": "1231231",
+        "proof_file": "689785cd0d7ee8.49220893_1000593768.jpg",
+        "timestamp": "2025-08-09 17:30:53"
+    },
+    "11": {
+        "plan": "",
+        "amount": "299",
+        "email": "mib18@mail.aub.edu",
+        "wish_number": "+961 81 862 271",
+        "reference_code": "123455",
+        "proof_file": "689785db8a4f16.43736995_Screenshot_2025-07-28_221008.png",
+        "timestamp": "2025-08-09 17:31:07"
+    },
+    "12": {
+        "plan": "",
+        "amount": "299",
+        "email": "mib18@mail.aub.edu",
+        "wish_number": "+961 81 862 271",
+        "reference_code": "1231231",
+        "proof_file": "68978898bd0fe5.38606824_1000593768.jpg",
+        "timestamp": "2025-08-09 17:42:48"
+    },
+    "13": {
+        "plan": "",
+        "amount": "299",
+        "email": "mib18@mail.aub.edu",
+        "wish_number": "+961 81 862 271",
+        "reference_code": "1231231",
+        "proof_file": "689789220b5606.41319279_Assignment_1_-_Sample_II.pdf",
+        "timestamp": "2025-08-09 17:45:06"
+    },
+    "14": {
+        "plan": "",
+        "amount": "299",
+        "email": "mib18@mail.aub.edu",
+        "wish_number": "+961 81 862 271",
+        "reference_code": "1234",
+        "proof_file": "68978d229ca076.78359794_____cmps_211_quiz_1_spring_23-24_____.pdf",
+        "timestamp": "2025-08-09 18:02:10"
+    }
+}

@@ -1,0 +1,29 @@
+[
+  {
+    "id": "cmps201",
+    "title": "CMPS 201 - Introduction to Java",
+    "instructor": "Mohamed AL Aalami",
+    "level": "Beginner",
+    "category": "Programming",
+    "image": "uploads/java-cover.jpg",
+    "lectures": [
+      { "id": "l1", "title": "Getting Started", "duration": "12:31", "src": "uploads/cmps201/01-intro.mp4" },
+      { "id": "l2", "title": "Variables and Types", "duration": "15:05", "src": "uploads/cmps201/02-variables.mp4" },
+      { "id": "l3", "title": "Control Flow", "duration": "18:47", "src": "uploads/cmps201/03-control-flow.mp4" }
+    ]
+  },
+  {
+    "id": "cmps211",
+    "title": "CMPS 211 - Discrete Mathematics",
+    "instructor": "Kamal Nouredinne",
+    "level": "Intermediate",
+    "category": "Mathematics",
+    "image": "uploads/discrete-cover.jpg",
+    "lectures": [
+      { "id": "l1", "title": "Propositional Logic", "duration": "10:02", "src": "uploads/cmps211/01-logic.mp4" },
+      { "id": "l2", "title": "Sets and Operations", "duration": "14:20", "src": "uploads/cmps211/02-sets.mp4" },
+      { "id": "l3", "title": "Functions and Relations", "duration": "17:11", "src": "uploads/cmps211/03-functions.mp4" }
+    ]
+  }
+]
+

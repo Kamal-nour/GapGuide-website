@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Course</title>
+<style>
+  :root{
+    --bg:#cfeaf1; --card:#ffffff; --ink:#0f172a; --muted:#64748b; --ring:rgba(2,6,23,.08);
+    --radius:16px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui, -apple-system, Segoe UI, Inter, Roboto, Arial, sans-serif;background:var(--bg);color:var(--ink)}
+  .wrap{max-width:1100px;margin:32px auto;padding:0 16px}
+  .crumbs{margin-bottom:14px;opacity:.75;font-size:14px}
+  .card{background:var(--card);border-radius:var(--radius);box-shadow:0 12px 32px var(--ring)}
+  .header{display:flex;gap:16px;align-items:center;padding:16px 18px;margin-bottom:16px}
+  .header img{width:84px;height:84px;border-radius:14px;object-fit:cover;background:#eee}
+  .title{font-size:28px;font-weight:800;line-height:1.15}
+  .sub{color:var(--muted);margin-top:4px}
+  .layout{display:grid;grid-template-columns:1.45fr .85fr;gap:18px}
+  @media (max-width:950px){.layout{grid-template-columns:1fr}}
+  .player video{width:100%;display:block;border-radius:var(--radius) var(--radius) 0 0;background:#000}
+  .now{padding:12px 14px;font-weight:600}
+  .playlist{padding:10px}
+  .lec{width:100%;display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;border:0;background:transparent;border-radius:12px;cursor:pointer}
+  .lec:hover{background:#f1f5f9}
+  .lec.active{background:#e2e8f0;font-weight:600}
+  .dur{font-size:12px;opacity:.7}
+  .upload{padding:14px;margin-top:18px}
+  .upload h4{margin:0 0 10px 0}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;background:#3b82f6;color:#fff;border:0;text-decoration:none;font-weight:600;cursor:pointer}
+  .muted{color:var(--muted)}
+  .empty{padding:24px;text-align:center;color:var(--muted)}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="crumbs"><a href="courses.html" class="muted" style="text-decoration:none">← All Courses</a></div>
+
+    <div class="card header">
+      <img id="cover" alt="">
+      <div>
+        <div id="courseTitle" class="title">Loading…</div>
+        <div id="meta" class="sub"></div>
+      </div>
+    </div>
+
+    <div class="layout">
+      <section class="card player">
+        <video id="video" controls preload="metadata">
+          <source id="videoSrc" src="" type="video/mp4">
+        </video>
+        <div id="now" class="now">Select a lecture</div>
+      </section>
+
+      <aside class="card">
+        <div id="playlist" class="playlist"></div>
+
+        <!-- Optional uploader (only shown with ?admin=1) -->
+        <div id="uploader" class="upload" style="display:none">
+          <h4>Upload a new lecture</h4>
+          <form action="upload_video.php" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="courseId" id="courseIdField">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <input type="file" name="video" accept="video/*" required>
+              <input type="text" name="title" placeholder="Lecture title" required>
+              <button class="btn" type="submit">Upload</button>
+            </div>
+            <p class="muted" style="margin-top:8px">Files go to <code>/uploads/&lt;courseId&gt;/</code>. Then add the lecture to <code>courses.json</code> (or extend the PHP to update it automatically).</p>
+          </form>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+<script>
+  const qs = new URLSearchParams(location.search);
+  const courseId = qs.get('id');
+  const lecParam = qs.get('lec');
+  const isAdmin = qs.get('admin') === '1';
+
+  const cover = document.getElementById('cover');
+  const courseTitle = document.getElementById('courseTitle');
+  const meta = document.getElementById('meta');
+  const playlistEl = document.getElementById('playlist');
+  const now = document.getElementById('now');
+  const video = document.getElementById('video');
+  const videoSrc = document.getElementById('videoSrc');
+
+  async function init(){
+    try{
+      const res = await fetch('course_videos.json', { cache: 'no-store' });
+      const data = await res.json();
+      const course = data.find(c => c.id === courseId);
+      if(!course){
+        document.querySelector('.layout').innerHTML = '<div class="card empty">Course not found.</div>';
+        return;
+      }
+
+      // header
+      courseTitle.textContent = course.title;
+      meta.textContent = `${course.instructor} · ${course.level} · ${course.category}`;
+      if (course.image) { cover.src = course.image; cover.alt = course.title; }
+
+      // playlist
+      playlistEl.innerHTML = '';
+      if(!course.lectures || course.lectures.length === 0){
+        playlistEl.innerHTML = '<div class="empty">No lectures yet.</div>';
+      } else {
+        course.lectures.forEach(lec => {
+          const btn = document.createElement('button');
+          btn.className = 'lec';
+          btn.dataset.lecId = lec.id;
+          btn.innerHTML = `<span>${lec.title}</span><span class="dur">${lec.duration || ''}</span>`;
+          btn.addEventListener('click', () => play(lec));
+          playlistEl.appendChild(btn);
+        });
+      }
+
+      // initial play
+      const initial = (course.lectures || []).find(l => l.id === lecParam) || (course.lectures || [])[0];
+      if(initial) play(initial);
+
+      // show uploader if admin
+      if(isAdmin){
+        document.getElementById('uploader').style.display = 'block';
+        document.getElementById('courseIdField').value = courseId;
+      }
+    }catch(err){
+      console.error(err);
+      document.querySelector('.layout').innerHTML = '<div class="card empty">Error loading course data.</div>';
+    }
+  }
+
+  function play(lec){
+    videoSrc.src = lec.src;
+    video.load();
+    video.play().catch(()=>{});
+    now.textContent = `${lec.title}${lec.duration ? ' · ' + lec.duration : ''}`;
+    document.querySelectorAll('.lec').forEach(x => x.classList.remove('active'));
+    const active = document.querySelector(`.lec[data-lec-id="${lec.id}"]`);
+    if(active) active.classList.add('active');
+    history.replaceState(null,'',`course.html?id=${encodeURIComponent(courseId)}&lec=${encodeURIComponent(lec.id)}${isAdmin?'&admin=1':''}`);
+  }
+
+  init();
+</script>
+</body>
+</html>

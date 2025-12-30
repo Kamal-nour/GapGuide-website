@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Level 2 Plan Payment</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #1a103d, #2d1f55, #3c1a66);
+      background-size: 300% 300%;
+      animation: gradientMove 8s ease infinite;
+    }
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .premium-card {
+      background: rgba(30, 20, 50, 0.95);
+      border: 2px solid rgba(186, 104, 255, 0.4);
+      box-shadow: 0 0 25px rgba(186, 104, 255, 0.6);
+    }
+    .premium-btn {
+      background: linear-gradient(90deg, #8e2de2, #4a00e0);
+      box-shadow: 0 0 15px rgba(142, 45, 226, 0.7);
+    }
+    .premium-btn:hover {
+      background: linear-gradient(90deg, #a445ff, #5f17ff);
+    }
+  </style>
+</head>
+<body class="text-white flex items-center justify-center min-h-screen">
+
+  <div class="premium-card p-8 rounded-2xl max-w-md w-full">
+    <h1 class="text-3xl font-bold mb-4 text-center text-purple-300">🌟 Level 2 Plan</h1>
+    <p class="mb-2">💵 <strong>$35</strong> / month</p>
+    <p class="mb-4">💰 <strong>$336</strong> / year</p>
+
+    <form id="paymentForm" enctype="multipart/form-data" class="space-y-4">
+      <input type="hidden" name="plan" value="Premium">
+
+      <label class="block mb-2">Choose Payment Option:</label>
+      <select name="amount" class="w-full p-2 rounded bg-gray-800 border border-purple-500 text-white">
+        <option value="35">Monthly - $35</option>
+        <option value="336">Annual - $336</option>
+      </select>
+
+      <label class="block mb-2">Wish Number:</label>
+      <input type="text" name="wish_number" readonly value="+961 81 862 271"
+             class="w-full p-2 rounded bg-gray-900 border border-purple-500 text-green-400 font-semibold"/>
+
+      <label class="block mb-2">Wish Transaction Reference Number:</label>
+      <input type="text" name="reference_code" required placeholder="Enter transaction reference"
+             class="w-full p-2 rounded bg-gray-900 border border-purple-500"/>
+
+      <label class="block mb-2">Upload Payment Proof:</label>
+      <input type="file" name="proof" accept="image/*" required
+             class="w-full p-2 rounded bg-gray-900 border border-purple-500"/>
+
+      <button type="submit" class="premium-btn w-full py-3 rounded font-semibold">Submit Payment</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("paymentForm").onsubmit = async function (e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+
+      try {
+        const response = await fetch("submit_subscription.php", {
+    method: "POST",
+    body: formData
+});
+
+        const result = await response.text();
+        if (result.includes("success")) {
+          alert("✅ Payment submitted successfully!");
+          this.reset();
+        } else {
+          alert("❌ Error submitting payment. Please try again.");
+        }
+      } catch (error) {
+        alert("❌ Network or server error.");
+        console.error(error);
+      }
+    };
+  </script>
+
+</body>
+</html>

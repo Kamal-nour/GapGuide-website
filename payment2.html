@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Luxury One-Time Payment</title>
+  <meta name="description" content="Make a secure, luxurious one-time payment." />
+  <link rel="canonical" href="./payment2.html" />
+  <style>
+    :root {
+      --bg: 262 61% 8%;
+      --surface: 264 42% 12%;
+      --text: 210 40% 98%;
+      --muted: 215 16% 66%;
+      --primary: 268 82% 65%;
+      --gold: 46 96% 56%;
+      --border: 270 30% 22%;
+      --radius: 14px;
+    }
+    * { box-sizing: border-box }
+    body {
+      margin: 0;
+      color: hsl(var(--text));
+      background:
+        radial-gradient(1200px 500px at 10% -10%, hsl(278 100% 50% / .15), transparent 60%),
+        radial-gradient(1000px 600px at 90% 10%, hsl(260 100% 50% / .12), transparent 70%),
+        linear-gradient(180deg, hsl(var(--bg)), hsl(260 60% 6%));
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      padding: 32px;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Inter, Arial;
+    }
+    .card {
+      width: min(720px, 100%);
+      background: hsl(var(--surface) / .66);
+      border: 1px solid hsl(var(--border));
+      border-radius: var(--radius);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 20px 60px -20px hsl(var(--primary) / .4), 0 8px 24px -12px hsl(260 50% 8% / .5);
+      overflow: hidden;
+      position: relative;
+    }
+    .card[data-glow]::after {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      pointer-events: none;
+      background: radial-gradient(400px 220px at var(--x, 50%) var(--y, 50%), hsl(var(--primary) / .25), transparent 60%);
+      transition: opacity .25s ease;
+    }
+    header { padding: 28px 28px 0 }
+    h1 { margin: 0; font-size: clamp(26px, 3.2vw, 34px); letter-spacing: .2px }
+    .sub { color: hsl(var(--muted)); margin: 6px 0 18px }
+    form { padding: 0 28px 28px; display: grid; gap: 18px }
+    label { font-size: 14px; color: hsl(var(--text) / .92); margin-bottom: 6px; display: block }
+    .row { display: grid; gap: 8px }
+    .inline { display: flex; gap: 10px; align-items: center }
+    input[type="text"], input[type="email"], input[type="number"], input[type="file"] {
+      width: 100%;
+      padding: 12px 14px;
+      background: hsl(258 35% 18% / .6);
+      border: 1px solid hsl(var(--border));
+      color: hsl(var(--text));
+      border-radius: 10px;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    input::placeholder { color: hsl(var(--muted) / .8) }
+    input:focus { border-color: hsl(var(--primary)); box-shadow: 0 0 0 3px hsl(var(--primary)/.25) }
+    .copyBtn {
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid hsl(var(--border));
+      background: hsl(258 35% 18% / .6);
+      color: hsl(var(--text));
+      cursor: pointer;
+      transition: transform .08s ease, filter .2s ease;
+    }
+    .copyBtn:hover { filter: brightness(1.06) }
+    .copyBtn:active { transform: translateY(1px) }
+    .cta {
+      margin-top: 8px;
+      padding: 14px 18px;
+      width: 100%;
+      border: 0;
+      border-radius: 12px;
+      cursor: pointer;
+      background-image: linear-gradient(135deg, hsl(var(--primary)), hsl(286 82% 66%));
+      color: hsl(var(--text));
+      font-weight: 800;
+      letter-spacing: .2px;
+      box-shadow: 0 0 32px hsl(var(--primary)/.6), 0 10px 40px -15px hsl(var(--primary)/.6);
+      transition: filter .2s ease, transform .08s ease;
+    }
+    .cta:hover { filter: brightness(1.05) }
+    .cta:active { transform: translateY(1px) }
+    .hint { font-size: 12px; color: hsl(var(--muted)); }
+    footer { padding: 0 28px 28px; display: flex; justify-content: space-between; align-items: center }
+    .brand { font-weight: 700; letter-spacing: .2px; color: hsl(var(--gold)) }
+
+    .error { color: #ffb4b4; font-size: 13px; }
+    .course-title { font-weight: 600; color: hsl(var(--primary)); margin-top: 2px; }
+  </style>
+</head>
+<body>
+  <article class="card" data-glow>
+    <header>
+      <div class="tag"><span class="dot"></span> Secure Checkout</div>
+      <h1 id="page-title">Luxury One-Time Payment</h1>
+      <p class="sub" id="page-desc">No subscriptions — just a single, elegant payment experience.</p>
+    </header>
+
+    <!-- form -->
+    <form id="pay-form" action="submit_payment.php" method="POST" enctype="multipart/form-data" novalidate>
+      <!-- Hidden fields -->
+      <input type="hidden" name="type" value="one_time" />
+      <input type="hidden" id="plan" name="plan" value="" />
+      <input type="hidden" id="course" name="course" value="" />
+
+      <div class="row">
+        <label for="courseName">Course</label>
+        <div>
+          <div id="courseName" class="course-title">—</div>
+        </div>
+      </div>
+
+      <div class="row">
+        <label for="amount">Amount (<span id="currency">USD</span>)</label>
+        <!-- amount is readonly and set from the course price -->
+        <input id="amount" name="amount" type="number" readonly required />
+      </div>
+
+      <div class="row">
+        <label for="email">Email for receipt</label>
+        <input id="email" name="email" type="email" placeholder="you@example.com" required />
+      </div>
+
+      <div class="row">
+        <label>Wish Number</label>
+        <div class="inline">
+          <input id="wish" name="wish_number" type="text" value="+961 81 862 271" readonly />
+          <button type="button" class="copyBtn" id="copy">Copy</button>
+        </div>
+        <span class="hint">Use this number to send your payment.</span>
+      </div>
+
+      <div class="row">
+        <label for="txref">Transaction Reference</label>
+        <input id="txref" name="reference_code" type="text" placeholder="Enter transaction reference" required />
+      </div>
+
+      <div class="row">
+        <label for="proof">Upload Payment Proof</label>
+        <input id="proof" name="proof" type="file" accept="image/png,image/jpeg,application/pdf" required />
+        <span class="hint">PNG, JPG or PDF (max 10 MB)</span>
+      </div>
+
+      <div class="error" id="errorBox" style="display:none;"></div>
+
+      <button class="cta" id="submit" type="submit">Submit Payment</button>
+    </form>
+
+    <footer>
+      <div class="brand">Aurum</div>
+      <span class="hint">Encrypted — Private — Fast</span>
+    </footer>
+  </article>
+
+  <script>
+    // Pointer glow
+    const card = document.querySelector('.card[data-glow]');
+    card.addEventListener('mousemove', (e) => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--x', `${e.clientX - r.left}px`);
+      card.style.setProperty('--y', `${e.clientY - r.top}px`);
+    });
+
+    // Copy wish number
+    document.getElementById('copy').addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(document.getElementById('wish').value);
+        alert("Number copied: " + document.getElementById('wish').value);
+      } catch {
+        alert("Copy failed. Select and copy manually.");
+      }
+    });
+
+    // Show errors
+    function showError(msg) {
+      const b = document.getElementById('errorBox');
+      b.style.display = 'block';
+      b.textContent = msg;
+    }
+
+    // clear error
+    function clearError() {
+      const b = document.getElementById('errorBox');
+      b.style.display = 'none';
+      b.textContent = '';
+    }
+
+    // Auto-fill amount & course from URL or courses.json
+    (async function init() {
+      const params = new URLSearchParams(window.location.search);
+      // prefer explicit price param (price or amount)
+      let price = params.get('price') || params.get('amount');
+      const courseParam = params.get('course') || params.get('title') || '';
+
+      // If no price but course title exists, try to fetch courses.json and find the price
+      if (!price && courseParam) {
+        try {
+          const r = await fetch('courses.json', {cache: "no-store"});
+          if (r.ok) {
+            const list = await r.json();
+            // attempt to find matching course by title (case-insensitive)
+            const match = list.find(c => c.title && c.title.toLowerCase() === decodeURIComponent(courseParam).toLowerCase());
+            if (match && typeof match.price !== 'undefined') {
+              price = String(match.price);
+              // also set plan from match.level or match.plan if available
+              if (match.level) document.getElementById('plan').value = match.level;
+            } else {
+              // try fuzzy partial match
+              const fuzzy = list.find(c => c.title && c.title.toLowerCase().includes(decodeURIComponent(courseParam).toLowerCase()));
+              if (fuzzy && typeof fuzzy.price !== 'undefined') {
+                price = String(fuzzy.price);
+                if (fuzzy.level) document.getElementById('plan').value = fuzzy.level;
+              }
+            }
+            // show course name if found
+            if (match) {
+              document.getElementById('courseName').textContent = match.title;
+              document.getElementById('course').value = match.title;
+            } else if (fuzzy) {
+              document.getElementById('courseName').textContent = fuzzy.title;
+              document.getElementById('course').value = fuzzy.title;
+            }
+          }
+        } catch (err) {
+          console.warn('Could not load courses.json', err);
+        }
+      }
+
+      // If price still not available, try reading 'course' param price field (maybe encoded title had price)
+      if (!price && params.get('course_price')) {
+        price = params.get('course_price');
+      }
+
+      // final fallback: if price present in URL but courseName missing, set course name from param
+      if (price && !document.getElementById('course').value) {
+        if (courseParam) {
+          document.getElementById('course').value = decodeURIComponent(courseParam);
+          document.getElementById('courseName').textContent = decodeURIComponent(courseParam);
+        } else {
+          document.getElementById('courseName').textContent = 'Selected Course';
+        }
+      }
+
+      if (!price) {
+        // nothing to charge — redirect back to courses
+        alert('No course price provided. Redirecting to courses page.');
+        window.location.href = 'courses.html';
+        return;
+      }
+
+      // sanitize numeric amount (no decimals if your prices are integers; adjust as needed)
+      const n = Number(price);
+      if (!isFinite(n) || n <= 0) {
+        showError('Invalid course price provided. Contact support.');
+        return;
+      }
+
+      // set amount and currency display
+      document.getElementById('amount').value = Math.round(n * 100) / 100; // 2-decimal safe
+      document.getElementById('currency').textContent = params.get('currency') || 'USD';
+      // if plan not already set by courses.json, set from param plan
+      if (!document.getElementById('plan').value) {
+        const planParam = params.get('plan') || '';
+        document.getElementById('plan').value = planParam;
+      }
+    })();
+
+    // Basic client-side check before submit
+    document.getElementById('pay-form').addEventListener('submit', function (e) {
+      clearError();
+      const email = document.getElementById('email').value.trim();
+      const tx = document.getElementById('txref').value.trim();
+      const proof = document.getElementById('proof').files[0];
+      const amount = document.getElementById('amount').value;
+
+      if (!email) { e.preventDefault(); showError('Email is required.'); return; }
+      // minimal email check
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { e.preventDefault(); showError('Please enter a valid email address.'); return; }
+
+      if (!tx) { e.preventDefault(); showError('Transaction reference is required.'); return; }
+      if (!proof) { e.preventDefault(); showError('Please upload a proof file (PNG, JPG or PDF).'); return; }
+      if (!amount || Number(amount) <= 0) { e.preventDefault(); showError('Invalid amount — please restart the checkout from the course page.'); return; }
+
+      // optionally you can show a "submitting" UI here
+    });
+  </script>
+</body>
+</html>
